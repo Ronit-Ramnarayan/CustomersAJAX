@@ -1,17 +1,37 @@
 ﻿
+@using CustomersAJAX.Models;
+@model Tuple<List<Customer>, Customer>
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
+@using (Html.BeginForm("OnSelectCustomer", "Customer"))
+{
+    @Html.AntiForgeryToken();
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Customer</title>
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>
+    var selected = false;
+
+    foreach (var customer in Model.Item1)
+    {
+        if (Model.Item2 == customer)
+        {
+            selected = true;
+        }
+        else
+        {
+            selected = false;
+        }
+                    @Html.RadioButton("CustomerNumber", customer.ID, selected);
+        @Html.Label(customer.Name);
+        <br />
+
+                }
+    <input type="submit" id="SubmitButton" value="Display Details" />
+}
+
+
+<!-- insert a partial view here. Show customer details-->
+
+<div id="customerInfo">
+    @Html.Partial("~/Views/Shared/_CustomerDetails.cshtml", Model.Item2)
+</div>
